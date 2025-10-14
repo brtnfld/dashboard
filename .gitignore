@@ -3,6 +3,9 @@ _explore/LAST_MASTER_UPDATE.log
 /_explore/github-data/
 .bundle
 
+# Spack directory created by GitHub Actions workflow
+spack/
+
 ### Jekyll ###
 _site/
 /public/
