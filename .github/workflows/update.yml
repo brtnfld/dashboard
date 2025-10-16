@@ -2,6 +2,8 @@ name: Run data update
 
 on:
    workflow_dispatch:
+   schedule:
+     - cron: "0 2 * * *"  # Run daily at 2:00 AM UTC
   
 jobs:
   update:
@@ -27,14 +29,26 @@ jobs:
           ./_explore/scripts/UPDATE.sh
         env:
           GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check for changes
+        id: check-changes
+        run: |
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes detected"
+            echo "has-changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changes detected"
+            echo "has-changes=true" >> $GITHUB_OUTPUT
+          fi
       - name: Commit changes
+        if: steps.check-changes.outputs.has-changes == 'true'
         run: |
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git add .
-          git commit --allow-empty -m "Ran collection scripts [AUTO-GENERATED]"
+          git commit -m "Ran collection scripts [AUTO-GENERATED]"
           git push
       - name: Merge changes into main branch
+        if: steps.check-changes.outputs.has-changes == 'true'
         run: |
           git fetch origin "${DEPLOY_BRANCH}:${DEPLOY_BRANCH}"
           git checkout "${DEPLOY_BRANCH}"
