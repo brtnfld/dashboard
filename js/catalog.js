@@ -736,12 +736,8 @@ function setVisibleRepo(newValue, shouldPushState) {
                   renderRepoListHtml();
                   console.log('[CATALOG] All data loaded and rendered');
                 })
-                .catch((error) => {
-                  console.error('[CATALOG] Error loading intReposInfo.json:', error);
-                });
-            })
             .catch((error) => {
-              console.error('[CATALOG] Error in fetch chain (topics or CASS mapping):', error);
+              console.error('[CATALOG] Error in fetch chain:', error);
             });
         })
         .catch((error) => {
