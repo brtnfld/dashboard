@@ -583,9 +583,15 @@ function setVisibleRepo(newValue, shouldPushState) {
     if (!hasUserVisitedCategoryListPageYet) {
       hasUserVisitedCategoryListPageYet = true;
       // init
+      console.log('[CATALOG] Fetching category_info.json from:', `${window.config.baseUrl}/catalog/category_info.json`);
       fetch(`${window.config.baseUrl}/catalog/category_info.json`)
-        .then((res) => res.json())
+        .then((res) => {
+          console.log('[CATALOG] category_info.json response status:', res.status);
+          return res.json();
+        })
         .then((catInfoJson) => {
+          console.log('[CATALOG] category_info.json loaded, categories:', Object.keys(catInfoJson.data).length);
+
           Object.values(catInfoJson.data)
             .map((data) => {
               data['displayTitle'] = titleCase(data.title);
@@ -728,7 +734,18 @@ function setVisibleRepo(newValue, shouldPushState) {
                     }
                   }
                   renderRepoListHtml();
+                  console.log('[CATALOG] All data loaded and rendered');
+                })
+                .catch((error) => {
+                  console.error('[CATALOG] Error loading intReposInfo.json:', error);
                 });
+            })
+            .catch((error) => {
+              console.error('[CATALOG] Error in fetch chain (topics or CASS mapping):', error);
+            });
+        })
+        .catch((error) => {
+          console.error('[CATALOG] Error loading category_info.json:', error);
         });
     }
     showCategoryList();
