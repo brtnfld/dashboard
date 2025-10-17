@@ -739,16 +739,8 @@ function setVisibleRepo(newValue, shouldPushState) {
 }
 
 /////////////////////////////////////////////////////////////////
-////////////////////// INIT /////////////////////////////////////
+////////////////////// EVENT LISTENERS //////////////////////////
 /////////////////////////////////////////////////////////////////
-
-// Sets initial category page
-const repoFromUrl = new URLSearchParams(window.location.search).get('repo') || '';
-setVisibleRepo(repoFromUrl, true);
-
-////////////////////////////////////////////////////////////////
-//////////////////////// EVENT LISTENERS ///////////////////////
-////////////////////////////////////////////////////////////////
 
 // searching
 document.getElementById('searchText').addEventListener('input', (e) => {
@@ -792,3 +784,15 @@ window.addEventListener('popstate', (e) => {
     onCategoryUpdate(hasOldCategoryState ? oldCategoryState : 0);
   }
 });
+
+// Initialize catalog after ensuring DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    const repoFromUrl = new URLSearchParams(window.location.search).get('repo') || '';
+    setVisibleRepo(repoFromUrl, true);
+  });
+} else {
+  // DOM already loaded (script is at end of body), initialize immediately
+  const repoFromUrl = new URLSearchParams(window.location.search).get('repo') || '';
+  setVisibleRepo(repoFromUrl, true);
+}
