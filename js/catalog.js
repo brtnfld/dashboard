@@ -550,9 +550,16 @@ function onCategoryUpdate(categoryIdx) {
 ////////////////////////////////////////////////
 
 function showCategoryList() {
+  console.log('[CATALOG] showCategoryList() called');
+  console.log('[CATALOG] ELEMENTS_ONLY_LIST count:', ELEMENTS_ONLY_LIST.length);
+  console.log('[CATALOG] ELEMENTS_ONLY_SINGLE_REPO count:', ELEMENTS_ONLY_SINGLE_REPO.length);
   setTimeout(() => window.scrollTo({ top: 0, behavior: 'auto' }), 0);
-  ELEMENTS_ONLY_LIST.forEach((ele) => ele.classList.remove(HIDDEN_CLASS));
+  ELEMENTS_ONLY_LIST.forEach((ele) => {
+    console.log('[CATALOG] Removing hidden from:', ele);
+    ele.classList.remove(HIDDEN_CLASS);
+  });
   ELEMENTS_ONLY_SINGLE_REPO.forEach((ele) => ele.classList.add(HIDDEN_CLASS));
+  console.log('[CATALOG] showCategoryList() complete');
 }
 
 function showSingleRepo() {
@@ -786,13 +793,26 @@ window.addEventListener('popstate', (e) => {
 });
 
 // Initialize catalog after ensuring DOM is ready
+console.log('[CATALOG] Script loaded, readyState:', document.readyState);
+console.log('[CATALOG] Elements check:', {
+  searchText: document.getElementById('searchText'),
+  orderProp: document.getElementById('orderProp'),
+  categoryNav: document.getElementById('category-nav'),
+  repositories: document.getElementById('repositories')
+});
+
 if (document.readyState === 'loading') {
+  console.log('[CATALOG] Waiting for DOMContentLoaded');
   document.addEventListener('DOMContentLoaded', () => {
+    console.log('[CATALOG] DOMContentLoaded fired');
     const repoFromUrl = new URLSearchParams(window.location.search).get('repo') || '';
+    console.log('[CATALOG] Initializing with repo:', repoFromUrl);
     setVisibleRepo(repoFromUrl, true);
   });
 } else {
   // DOM already loaded (script is at end of body), initialize immediately
+  console.log('[CATALOG] DOM already loaded, initializing immediately');
   const repoFromUrl = new URLSearchParams(window.location.search).get('repo') || '';
+  console.log('[CATALOG] Initializing with repo:', repoFromUrl);
   setVisibleRepo(repoFromUrl, true);
 }
