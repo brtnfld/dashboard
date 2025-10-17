@@ -418,6 +418,12 @@
                 "totalCount": 0
             }
         },
+        "Kitware/VTK-m": {
+            "repositoryTopics": {
+                "nodes": [],
+                "totalCount": 0
+            }
+        },
         "LLNL/sundials": {
             "repositoryTopics": {
                 "nodes": [
@@ -687,76 +693,7 @@
                 "totalCount": 0
             }
         },
-        "Viskores/viskores": {
-            "repositoryTopics": {
-                "nodes": [
-                    {
-                        "resourcePath": "/topics/cuda",
-                        "topic": {
-                            "name": "cuda"
-                        },
-                        "url": "https://github.com/topics/cuda"
-                    },
-                    {
-                        "resourcePath": "/topics/hip",
-                        "topic": {
-                            "name": "hip"
-                        },
-                        "url": "https://github.com/topics/hip"
-                    },
-                    {
-                        "resourcePath": "/topics/hpc",
-                        "topic": {
-                            "name": "hpc"
-                        },
-                        "url": "https://github.com/topics/hpc"
-                    },
-                    {
-                        "resourcePath": "/topics/kokkos",
-                        "topic": {
-                            "name": "kokkos"
-                        },
-                        "url": "https://github.com/topics/kokkos"
-                    },
-                    {
-                        "resourcePath": "/topics/metaprogramming",
-                        "topic": {
-                            "name": "metaprogramming"
-                        },
-                        "url": "https://github.com/topics/metaprogramming"
-                    },
-                    {
-                        "resourcePath": "/topics/sciences",
-                        "topic": {
-                            "name": "sciences"
-                        },
-                        "url": "https://github.com/topics/sciences"
-                    },
-                    {
-                        "resourcePath": "/topics/visualization",
-                        "topic": {
-                            "name": "visualization"
-                        },
-                        "url": "https://github.com/topics/visualization"
-                    },
-                    {
-                        "resourcePath": "/topics/vtk",
-                        "topic": {
-                            "name": "vtk"
-                        },
-                        "url": "https://github.com/topics/vtk"
-                    }
-                ],
-                "totalCount": 8
-            }
-        },
         "anlsys/aml": {
-            "repositoryTopics": {
-                "nodes": [],
-                "totalCount": 0
-            }
-        },
-        "cass-community/cass-community.github.io": {
             "repositoryTopics": {
                 "nodes": [],
                 "totalCount": 0
@@ -805,6 +742,20 @@
                             "name": "python"
                         },
                         "url": "https://github.com/topics/python"
+                    },
+                    {
+                        "resourcePath": "/topics/tensorflow",
+                        "topic": {
+                            "name": "tensorflow"
+                        },
+                        "url": "https://github.com/topics/tensorflow"
+                    },
+                    {
+                        "resourcePath": "/topics/keras",
+                        "topic": {
+                            "name": "keras"
+                        },
+                        "url": "https://github.com/topics/keras"
                     },
                     {
                         "resourcePath": "/topics/deep-learning",
@@ -863,7 +814,7 @@
                         "url": "https://github.com/topics/raylib"
                     }
                 ],
-                "totalCount": 13
+                "totalCount": 15
             }
         },
         "diatomic/diy": {
@@ -1770,12 +1721,6 @@
             }
         },
         "xiaoyeli/superlu_mt": {
-            "repositoryTopics": {
-                "nodes": [],
-                "totalCount": 0
-            }
-        },
-        "xsdk-project/xsdk-issues": {
             "repositoryTopics": {
                 "nodes": [],
                 "totalCount": 0

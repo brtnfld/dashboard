@@ -105,6 +105,12 @@
         "topics": null,
         "website": ""
     },
+    "Kitware/VTK-m": {
+        "description": "Mirror of https://gitlab.kitware.com/vtk/vtk-m",
+        "name": "Kitware/VTK-m",
+        "topics": null,
+        "website": null
+    },
     "LLNL/sundials": {
         "description": "Official development repository for SUNDIALS - a SUite of Nonlinear and DIfferential/ALgebraic equation Solvers. Pull requests are welcome for bug fixes and minor changes.",
         "name": "LLNL/sundials",
@@ -188,32 +194,11 @@
         "topics": null,
         "website": "http://tau.uoregon.edu"
     },
-    "Viskores/viskores": {
-        "description": "A visualization library for many-threaded devices.",
-        "name": "Viskores/viskores",
-        "topics": [
-            "cuda",
-            "hip",
-            "hpc",
-            "kokkos",
-            "metaprogramming",
-            "sciences",
-            "visualization",
-            "vtk"
-        ],
-        "website": ""
-    },
     "anlsys/aml": {
         "description": "Building Blocks for Explicit Memory Management on Complex Architectures",
         "name": "anlsys/aml",
         "topics": null,
         "website": "https://argo-aml.readthedocs.io/"
-    },
-    "cass-community/cass-community.github.io": {
-        "description": "Developing a new version of the CASS website",
-        "name": "cass-community/cass-community.github.io",
-        "topics": null,
-        "website": "https://cass.community/"
     },
     "darshan-hpc/darshan": {
         "description": "  Darshan I/O characterization tool",
@@ -222,7 +207,7 @@
         "website": null
     },
     "deephyper/deephyper": {
-        "description": "DeepHyper: A Python Package for Massively Parallel Hyperparameter Optimization in Machine Learning",
+        "description": "DeepHyper: Scalable Asynchronous Neural Architecture and Hyperparameter Search for Deep Neural Networks",
         "name": "deephyper/deephyper",
         "topics": [
             "automl",
@@ -230,6 +215,8 @@
             "neural-architecture-search",
             "hyperparameter-optimization",
             "python",
+            "tensorflow",
+            "keras",
             "deep-learning",
             "hpc",
             "machine-learning",
@@ -505,12 +492,6 @@
     "xiaoyeli/superlu_mt": {
         "description": null,
         "name": "xiaoyeli/superlu_mt",
-        "topics": null,
-        "website": null
-    },
-    "xsdk-project/xsdk-issues": {
-        "description": "A repository under which GitHub issues not related to a specific xSDK repo can be filed.",
-        "name": "xsdk-project/xsdk-issues",
         "topics": null,
         "website": null
     }

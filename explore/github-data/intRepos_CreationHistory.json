@@ -40,6 +40,11 @@
             "firstCommitAt": "2022-08-18T21:50:53Z",
             "initBeforeGitHubRepo": false
         },
+        "Kitware/VTK-m": {
+            "createdAt": "2019-06-03T18:26:09Z",
+            "firstCommitAt": "2014-02-04T20:08:03Z",
+            "initBeforeGitHubRepo": true
+        },
         "LLNL/sundials": {
             "createdAt": "2017-10-05T17:20:03Z",
             "firstCommitAt": "2002-02-11T23:57:38Z",
@@ -80,19 +85,9 @@
             "firstCommitAt": "1997-11-26T20:04:40Z",
             "initBeforeGitHubRepo": true
         },
-        "Viskores/viskores": {
-            "createdAt": "2024-05-08T12:48:38Z",
-            "firstCommitAt": "2014-02-04T20:08:03Z",
-            "initBeforeGitHubRepo": true
-        },
         "anlsys/aml": {
             "createdAt": "2021-04-20T18:32:54Z",
             "firstCommitAt": "2016-06-23T16:06:28Z",
-            "initBeforeGitHubRepo": true
-        },
-        "cass-community/cass-community.github.io": {
-            "createdAt": "2024-11-24T15:45:53Z",
-            "firstCommitAt": "2024-11-24T15:45:53Z",
             "initBeforeGitHubRepo": true
         },
         "darshan-hpc/darshan": {
@@ -224,11 +219,6 @@
             "createdAt": "2021-05-29T04:36:58Z",
             "firstCommitAt": "2013-03-19T22:10:40Z",
             "initBeforeGitHubRepo": true
-        },
-        "xsdk-project/xsdk-issues": {
-            "createdAt": "2017-03-21T19:02:58Z",
-            "firstCommitAt": "2017-03-21T19:02:59Z",
-            "initBeforeGitHubRepo": false
         }
     }
 }
