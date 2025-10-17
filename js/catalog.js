@@ -550,16 +550,9 @@ function onCategoryUpdate(categoryIdx) {
 ////////////////////////////////////////////////
 
 function showCategoryList() {
-  console.log('[CATALOG] showCategoryList() called');
-  console.log('[CATALOG] ELEMENTS_ONLY_LIST count:', ELEMENTS_ONLY_LIST.length);
-  console.log('[CATALOG] ELEMENTS_ONLY_SINGLE_REPO count:', ELEMENTS_ONLY_SINGLE_REPO.length);
   setTimeout(() => window.scrollTo({ top: 0, behavior: 'auto' }), 0);
-  ELEMENTS_ONLY_LIST.forEach((ele) => {
-    console.log('[CATALOG] Removing hidden from:', ele);
-    ele.classList.remove(HIDDEN_CLASS);
-  });
+  ELEMENTS_ONLY_LIST.forEach((ele) => ele.classList.remove(HIDDEN_CLASS));
   ELEMENTS_ONLY_SINGLE_REPO.forEach((ele) => ele.classList.add(HIDDEN_CLASS));
-  console.log('[CATALOG] showCategoryList() complete');
 }
 
 function showSingleRepo() {
@@ -583,15 +576,9 @@ function setVisibleRepo(newValue, shouldPushState) {
     if (!hasUserVisitedCategoryListPageYet) {
       hasUserVisitedCategoryListPageYet = true;
       // init
-      console.log('[CATALOG] Fetching category_info.json from:', `${window.config.baseUrl}/catalog/category_info.json`);
       fetch(`${window.config.baseUrl}/catalog/category_info.json`)
-        .then((res) => {
-          console.log('[CATALOG] category_info.json response status:', res.status);
-          return res.json();
-        })
+        .then((res) => res.json())
         .then((catInfoJson) => {
-          console.log('[CATALOG] category_info.json loaded, categories:', Object.keys(catInfoJson.data).length);
-
           Object.values(catInfoJson.data)
             .map((data) => {
               data['displayTitle'] = titleCase(data.title);
@@ -734,14 +721,7 @@ function setVisibleRepo(newValue, shouldPushState) {
                     }
                   }
                   renderRepoListHtml();
-                  console.log('[CATALOG] All data loaded and rendered');
-                })
-            .catch((error) => {
-              console.error('[CATALOG] Error in fetch chain:', error);
-            });
-        })
-        .catch((error) => {
-          console.error('[CATALOG] Error loading category_info.json:', error);
+                });
         });
     }
     showCategoryList();
@@ -759,8 +739,16 @@ function setVisibleRepo(newValue, shouldPushState) {
 }
 
 /////////////////////////////////////////////////////////////////
-////////////////////// EVENT LISTENERS //////////////////////////
+////////////////////// INIT /////////////////////////////////////
 /////////////////////////////////////////////////////////////////
+
+// Sets initial category page
+const repoFromUrl = new URLSearchParams(window.location.search).get('repo') || '';
+setVisibleRepo(repoFromUrl, true);
+
+////////////////////////////////////////////////////////////////
+//////////////////////// EVENT LISTENERS ///////////////////////
+////////////////////////////////////////////////////////////////
 
 // searching
 document.getElementById('searchText').addEventListener('input', (e) => {
@@ -804,28 +792,3 @@ window.addEventListener('popstate', (e) => {
     onCategoryUpdate(hasOldCategoryState ? oldCategoryState : 0);
   }
 });
-
-// Initialize catalog after ensuring DOM is ready
-console.log('[CATALOG] Script loaded, readyState:', document.readyState);
-console.log('[CATALOG] Elements check:', {
-  searchText: document.getElementById('searchText'),
-  orderProp: document.getElementById('orderProp'),
-  categoryNav: document.getElementById('category-nav'),
-  repositories: document.getElementById('repositories')
-});
-
-if (document.readyState === 'loading') {
-  console.log('[CATALOG] Waiting for DOMContentLoaded');
-  document.addEventListener('DOMContentLoaded', () => {
-    console.log('[CATALOG] DOMContentLoaded fired');
-    const repoFromUrl = new URLSearchParams(window.location.search).get('repo') || '';
-    console.log('[CATALOG] Initializing with repo:', repoFromUrl);
-    setVisibleRepo(repoFromUrl, true);
-  });
-} else {
-  // DOM already loaded (script is at end of body), initialize immediately
-  console.log('[CATALOG] DOM already loaded, initializing immediately');
-  const repoFromUrl = new URLSearchParams(window.location.search).get('repo') || '';
-  console.log('[CATALOG] Initializing with repo:', repoFromUrl);
-  setVisibleRepo(repoFromUrl, true);
-}
