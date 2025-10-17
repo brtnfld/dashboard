@@ -7,7 +7,7 @@
         "alt": "Data and Visualization"
       },
       "description": {
-        "short": "Provide capabilities for analyzing, visualizing, compressing, moving, and managing data",
+        "short": "Manage visualizations with robust features and configurable analysis",
         "long": ""
       },
       "topics": [
@@ -63,7 +63,7 @@
         "alt": "Mathematical Libraries"
       },
       "description": {
-        "short": "Scalable libraries supporting the latest HPC architectures for coupled systems, ensemble calculations, and more",
+        "short": "Robust mathematical techniques and numerical algorithms to reliably address the challenges of large-scale simulation of complex physical phenomena,
         "long": ""
       },
       "topics": [
@@ -84,7 +84,7 @@
         "alt": "Programming Models and Runtimes"
       },
       "description": {
-        "short": "Support intra-node and inter-node concurrency on current and next-generation HPC node architectures",
+        "short": "Programming Systems are the first point of contact in human-computer interactions, and never ceased to evolve along with hardware and software technology",
         "long": ""
       },
       "topics": [

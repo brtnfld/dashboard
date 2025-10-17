@@ -20,6 +20,7 @@ const REPO_SECTION_ELEMENT = document.getElementById('repositories');
 const ELEMENT_NAV_DESKTOP = document.getElementById('category-nav');
 const ELEMENT_NAV_MOBILE = document.getElementById('category-hamburger-nav');
 const REPO_HEADER_ELEMENT = document.getElementById('category-header');
+const ELEMENT_WELCOME_TEXT = document.getElementById('welcome-text');
 
 const ELEMENT_SEARCH = document.getElementById('searchText');
 
@@ -530,6 +531,14 @@ function onCategoryUpdate(categoryIdx) {
       button.classList.add('selected-tab');
     } else {
       button.classList.remove('selected-tab');
+    }
+  }
+  // Show welcome text only for "All Software" category (index 0)
+  if (ELEMENT_WELCOME_TEXT) {
+    if (categoryIdx === 0) {
+      ELEMENT_WELCOME_TEXT.classList.remove(HIDDEN_CLASS);
+    } else {
+      ELEMENT_WELCOME_TEXT.classList.add(HIDDEN_CLASS);
     }
   }
   renderRepoListHeaderHtml();
