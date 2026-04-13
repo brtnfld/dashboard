@@ -1,0 +1,27 @@
+.github/workflows/update.yml
+  79177013ef110945 10
+.github/workflows/get_cass_projects.yml
+  79177013ef110945 10
+.github/workflows/docker-image.yml
+  79177013ef110945 13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "f3c49f524d2b95e19b4a2cb5f2028a69f82a0f27",
+  "prompts": {
+    "79177013ef110945": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8c3644b3-be0c-4d6a-a192-6f1f3fa3e1d7",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "M. Scot Breitenfeld",
+      "messages": [],
+      "total_additions": 3,
+      "total_deletions": 0,
+      "accepted_lines": 1481,
+      "overriden_lines": 0
+    }
+  }
+}
