@@ -1,0 +1,23 @@
+_explore/scripts/gather_repo_metadata.py
+  79177013ef110945 31-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8",
+  "base_commit_sha": "128596bf0f9928fbdea3b09e8b6dfd1654158703",
+  "prompts": {
+    "79177013ef110945": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "8c3644b3-be0c-4d6a-a192-6f1f3fa3e1d7",
+        "model": "claude-sonnet-4-6"
+      },
+      "human_author": "M. Scot Breitenfeld",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 2,
+      "accepted_lines": 1480,
+      "overriden_lines": 0
+    }
+  }
+}
