@@ -29,6 +29,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Download the latest sustainability-metrics artifact from corsa-center/metrics
+          # The artifact contains per-package directories: {repo}-metrics/metrics.json
           ARTIFACT_URL=$(gh api repos/corsa-center/metrics/actions/artifacts \
             --jq '[.artifacts[] | select(.name == "sustainability-metrics" and .expired == false)] | sort_by(.created_at) | last | .archive_download_url')
 
@@ -36,7 +37,8 @@ jobs:
             echo "Downloading metrics artifact..."
             gh api "$ARTIFACT_URL" > /tmp/metrics.zip
             unzip -o /tmp/metrics.zip -d explore/github-data/
-            echo "Sustainability metrics updated"
+            echo "Sustainability metrics updated:"
+            ls -d explore/github-data/*-metrics/ 2>/dev/null || true
           else
             echo "::warning::No sustainability-metrics artifact found in corsa-center/metrics"
           fi
