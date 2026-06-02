@@ -24,6 +24,31 @@ jobs:
           buildcache: false
           color: false
           spack_path: spack
+      - name: Download sustainability metrics
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          RUN_ID=$(gh run list \
+            --repo corsa-center/metrics \
+            --workflow collect-and-sync.yml \
+            --status success \
+            --limit 1 \
+            --json databaseId \
+            --jq '.[0].databaseId // empty')
+
+          if [ -z "$RUN_ID" ]; then
+            echo "::warning::No successful metrics run found in corsa-center/metrics — skipping"
+            exit 0
+          fi
+
+          echo "Downloading sustainability-metrics artifact from run $RUN_ID"
+          gh run download "$RUN_ID" \
+            --repo corsa-center/metrics \
+            --name sustainability-metrics \
+            --dir explore/github-data
+
+          echo "Packages updated:"
+          ls -d explore/github-data/*-metrics/ 2>/dev/null || echo "  (none)"
       - name: Run update script
         run:
           ./_explore/scripts/UPDATE.sh
