@@ -1,34 +1,27 @@
 from scraper.github import queryManager as qm
-from os import environ as env
+from gh_collector import gh_data_dir, load_data, load_repo_list, make_query_manager
 
-ghDataDir = env.get("GITHUB_DATA", "../github-data")
-datfilepath = "%s/extRepos.json" % ghDataDir
+ghDataDir = gh_data_dir()
+datfilepath = ghDataDir / "extRepos.json"
 queryPath = "../queries/user-Repos.gql"
 
-# Read repo info data file (to use as repo list)
-inputLists = qm.DataManager("%s/intReposInfo.json" % ghDataDir, True)
-# Populate repo list
-repolist = []
-print("Getting internal repos ...")
-repolist = sorted(inputLists.data["data"].keys())
-print("Repo list complete. Found %d repos." % (len(repolist)))
+repolist = load_repo_list(ghDataDir)
 
 # Read internal user data file (to use as member list)
-inputLists = qm.DataManager("%s/intUsers.json" % ghDataDir, True)
-# Populate member list
-memberlist = []
+inputLists = qm.DataManager(str(ghDataDir / "intUsers.json"), True)
 print("Getting internal members ...")
 memberlist = sorted(inputLists.data["data"].keys())
 print("Member list complete. Found %d users." % (len(memberlist)))
 
-# Initialize data collector
-dataCollector = qm.DataManager(datfilepath, False)
-dataCollector.data = {"data": {}}
+# Load existing external repo data to preserve repo metadata across runs
+dataCollector = load_data(datfilepath)
 
-# Initialize query manager
-queryMan = qm.GitHubQueryManager()
+# Reset contributor lists so re-runs don't accumulate duplicates
+for repoKey in dataCollector.data["data"]:
+    dataCollector.data["data"][repoKey]["labContributors"] = {"nodes": []}
 
-# Iterate through internal members
+queryMan = make_query_manager()
+
 print("Gathering data across multiple paginated queries...")
 for usr in memberlist:
     print("\n'%s'" % (usr))
@@ -46,7 +39,6 @@ for usr in memberlist:
         print(error)
         continue
 
-    # Update collective data
     for repo in outObj["data"]["user"]["repositoriesContributedTo"]["nodes"]:
         repoKey = repo["nameWithOwner"]
         if repoKey in repolist:
@@ -61,7 +53,6 @@ for usr in memberlist:
 
 print("\nCollective data gathering complete!")
 
-# Write output file
 dataCollector.fileSave(newline="\n")
 
 print("\nDone!\n")

@@ -1,38 +1,34 @@
 from scraper.github import queryManager as qm
 import os
 from os import environ as env
-import json
-import requests
 import sys
 from urllib.parse import quote as urlquote
+from gh_collector import gh_data_dir, load_data, load_input_lists
 
-ghDataDir = env.get("GITHUB_DATA", "../github-data")
-datfilepath = "%s/intReposInfo.json" % ghDataDir
-cdash_data_path = os.path.normpath(os.path.join(ghDataDir, "..", "cass_project_data"))
+ghDataDir = gh_data_dir()
+datfilepath = ghDataDir / "intReposInfo.json"
+cdash_data_path = ghDataDir.parent / "cass_project_data"
 queryPath = "../queries/org-Repos-Info.gql"
 queryPathInd = "../queries/repo-Info.gql"
 
-# Initialize data collector (single file for all repo types)
-dataCollector = qm.DataManager(datfilepath, False)
-dataCollector.data = {"data": {}}
+dataCollector = load_data(datfilepath)
 
 # setup cdash repo context
 cdash_mapping = {}
-with open(os.path.join(cdash_data_path, "cass_member_cdashes.csv")) as f:
+with open(os.path.join(str(cdash_data_path), "cass_member_cdashes.csv")) as f:
     for line in f.readlines():
         repo, cdash_url = line.strip("\n").split(",")
         cdash_mapping[repo] = cdash_url
 
-# Read input lists of organizations and independent repos of interest
-inputLists = qm.DataManager("../input_lists.json", True)
+inputLists = load_input_lists()
 for hostUrl, hostInfo in inputLists.data.items():
     repoType = hostInfo["repoType"]
     if repoType == "bitbucket":
         print("%s: %s support not yet enabled, skipping for now" % (hostUrl, repoType))
         continue
     if repoType == "gitlab":
-        # Handle GitLab repos via REST API
         print("%s: Gathering GitLab repo info..." % hostUrl)
+        import requests
         apiToken = env.get(hostInfo.get("apiEnvKey", ""), "")
         headers = {}
         if apiToken:
@@ -46,7 +42,6 @@ for hostUrl, hostInfo in inputLists.data.items():
                 resp.raise_for_status()
                 proj = resp.json()
 
-                # Map GitLab API fields to the same format as GitHub data
                 info = {}
                 info["createdAt"] = proj.get("created_at")
                 info["defaultBranchRef"] = {"name": proj.get("default_branch")}
@@ -68,7 +63,6 @@ for hostUrl, hostInfo in inputLists.data.items():
                 info["stargazers"] = {"totalCount": proj.get("star_count", 0)}
                 info["url"] = proj.get("web_url", "%s/%s" % (hostUrl, repo))
 
-                # Fetch languages
                 try:
                     langResp = requests.get(
                         "%s/api/v4/projects/%s/languages" % (hostUrl, urlquote(repo, safe="")),
@@ -98,7 +92,6 @@ for hostUrl, hostInfo in inputLists.data.items():
     orglist = hostInfo["orgs"]
     repolist = hostInfo["repos"]
 
-    # Initialize query manager
     '''
     TODO we will soon want to do a couple of things:
     1. The type of the "queryMan" object should be determined by the "repoType" string (i.e. GitlabQueryManger)
@@ -107,7 +100,6 @@ for hostUrl, hostInfo in inputLists.data.items():
     '''
     queryMan = qm.GitHubQueryManager(apiToken=env.get(hostInfo["apiEnvKey"]))
 
-    # Iterate through orgs of interest
     print("%s: Gathering data across multiple paginated queries..." % hostUrl)
     for org in orglist:
         print("\n'%s'" % (org))
@@ -125,10 +117,8 @@ for hostUrl, hostInfo in inputLists.data.items():
             print(error)
             continue
 
-        # Update collective data
         for repo in outObj["data"]["organization"]["repositories"]["nodes"]:
             repoKey = repo["nameWithOwner"]
-            # TODO maybe handle each hostURL differently?
             dataCollector.data["data"][repoKey] = repo
             if repoKey in cdash_mapping:
                 dataCollector.data["data"][repoKey]["cdash"] = cdash_mapping[repoKey]
@@ -137,7 +127,6 @@ for hostUrl, hostInfo in inputLists.data.items():
 
     print("\n%s: Collective data gathering Part1of2 complete!" % (hostUrl))
 
-    # Iterate through independent repos
     print("%s: Adding independent repos..." % (hostUrl))
     print("%s: Gathering data across multiple queries..." % (hostUrl))
     for repo in repolist:
@@ -153,9 +142,7 @@ for hostUrl, hostInfo in inputLists.data.items():
             print(error)
             continue
 
-        # Update collective data
         repoKey = outObj["data"]["repository"]["nameWithOwner"]
-        # TODO maybe handle each hostURL differently?
         dataCollector.data["data"][repoKey] = outObj["data"]["repository"]
         if repoKey in cdash_mapping:
             dataCollector.data["data"][repoKey]["cdash"] = cdash_mapping[repoKey]
@@ -164,7 +151,6 @@ for hostUrl, hostInfo in inputLists.data.items():
 
     print("\n%s: Collective data gathering Part2of2 complete!" % (hostUrl))
 
-# Write output file
 dataCollector.fileSave(newline="\n")
 
 print("\nDone!\n")

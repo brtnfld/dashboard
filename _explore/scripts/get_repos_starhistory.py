@@ -1,27 +1,14 @@
-from scraper.github import queryManager as qm
-from os import environ as env
+from gh_collector import gh_data_dir, load_data, load_repo_list, make_query_manager
 from datetime import date, timedelta
 
-ghDataDir = env.get("GITHUB_DATA", "../github-data")
-datfilepath = "%s/intRepos_StarHistory.json" % ghDataDir
+ghDataDir = gh_data_dir()
+datfilepath = ghDataDir / "intRepos_StarHistory.json"
 queryPath = "../queries/repo-Stargazers.gql"
 
-# Read repo info data file (to use as repo list)
-inputLists = qm.DataManager("%s/intReposInfo.json" % ghDataDir, True)
-# Populate repo list
-repolist = []
-print("Getting internal repos ...")
-repolist = sorted(inputLists.data["data"].keys())
-print("Repo list complete. Found %d repos." % (len(repolist)))
+repolist = load_repo_list(ghDataDir)
+dataCollector = load_data(datfilepath)
+queryMan = make_query_manager()
 
-# Initialize query manager
-queryMan = qm.GitHubQueryManager()
-
-# Initialize data collector
-dataCollector = qm.DataManager(datfilepath, False)
-dataCollector.data = {"data": {}}
-
-# Iterate through internal repos
 print("Gathering data across multiple paginated queries...")
 for repo in repolist:
     print("\n'%s'" % (repo))
@@ -40,7 +27,6 @@ for repo in repolist:
         print(error)
         continue
 
-    # Update collective data
     dataCollector.data["data"][repo] = outObj["data"]["repository"]
 
     print("'%s' Done!" % (repo))
@@ -77,7 +63,6 @@ for repo in dataCollector.data["data"]:
             dateElement["value"] = 1
     dataCollector.data["data"][repo] = dateList
 
-# Write output files
 dataCollector.fileSave(newline="\n")
 
 print("\nDone!\n")

@@ -1,36 +1,29 @@
 from scraper.github import queryManager as qm
-from os import environ as env
+from gh_collector import gh_data_dir, load_data, load_repo_list, make_query_manager
 
-ghDataDir = env.get("GITHUB_DATA", "../github-data")
-datfilepathExt = "%s/extUsers.json" % ghDataDir
-datfilepathInt = "%s/intUsers.json" % ghDataDir
+ghDataDir = gh_data_dir()
+datfilepathExt = ghDataDir / "extUsers.json"
+datfilepathInt = ghDataDir / "intUsers.json"
 queryPath = "../queries/repo-Users.gql"
 
-# Read repo info data file (to use as repo list)
-inputLists = qm.DataManager("%s/intReposInfo.json" % ghDataDir, True)
-# Populate repo list
-repolist = []
-print("Getting internal repos ...")
-repolist = sorted(inputLists.data["data"].keys())
-print("Repo list complete. Found %d repos." % (len(repolist)))
+repolist = load_repo_list(ghDataDir)
 
-# Initialize internal user data collector
-# and Read internal user data file (to use as member list)
-dataCollectorInt = qm.DataManager(datfilepathInt, True)
-# Populate member list
-memberlist = []
-print("Getting internal members ...")
+# Internal users must already exist (written by get_internal_members.py)
+dataCollectorInt = qm.DataManager(str(datfilepathInt), True)
 memberlist = sorted(dataCollectorInt.data["data"].keys())
 print("Member list complete. Found %d users." % (len(memberlist)))
 
-# Initialize external user data collector
-dataCollectorExt = qm.DataManager(datfilepathExt, False)
-dataCollectorExt.data = {"data": {}}
+# Load existing external user data to preserve profiles across runs
+dataCollectorExt = load_data(datfilepathExt)
 
-# Initialize query manager
-queryMan = qm.GitHubQueryManager()
+# Reset contribution lists so re-runs don't accumulate duplicates
+for userKey in dataCollectorInt.data["data"]:
+    dataCollectorInt.data["data"][userKey]["contributedLabRepositories"] = {"nodes": []}
+for userKey in dataCollectorExt.data["data"]:
+    dataCollectorExt.data["data"][userKey]["contributedLabRepositories"] = {"nodes": []}
 
-# Iterate through internal repos
+queryMan = make_query_manager()
+
 print("Gathering data across multiple paginated queries...")
 for repo in repolist:
     print("\n'%s'" % (repo))
@@ -49,7 +42,6 @@ for repo in repolist:
         print(error)
         continue
 
-    # Update collective data
     for user in outObj["data"]["repository"]["mentionableUsers"]["nodes"]:
         userKey = user["login"]
         if userKey in memberlist:
@@ -83,7 +75,6 @@ for repo in repolist:
 
 print("\nCollective data gathering complete!")
 
-# Write output files
 dataCollectorExt.fileSave(newline="\n")
 dataCollectorInt.fileSave(newline="\n")
 
