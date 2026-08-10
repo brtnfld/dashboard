@@ -13,10 +13,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
       with:
         python-version: '3.10'
 
@@ -26,7 +26,7 @@ jobs:
 
     - name: Run script
       run: python ./_explore/scripts/get_cass_projects.py
-  
+
     - name: Check for changes to input_lists.json
       id: check-for-changes
       run: |
@@ -39,12 +39,9 @@ jobs:
         fi
 
     - name: Commit changes
-      if: ${{ steps.check-for-changes.outputs.has-changes == true }}
-        echo "Commit changes."
-
+      if: steps.check-for-changes.outputs.has-changes == 'true'
       uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9.1.4
       with:
         author_name: github-actions
         author_email: 41898282+github-actions[bot]@users.noreply.github.com
         message: 'Committing new products found in CASS _software'
-
