@@ -1,10 +1,11 @@
+import sys
 from scraper.github import queryManager as qm
-from gh_collector import gh_data_dir, load_data, load_repo_list, make_query_manager
+from gh_collector import gh_data_dir, gh_queries_dir, load_data, load_repo_list, make_query_manager
 
 ghDataDir = gh_data_dir()
 datfilepathExt = ghDataDir / "extUsers.json"
 datfilepathInt = ghDataDir / "intUsers.json"
-queryPath = "../queries/repo-Users.gql"
+queryPath = str(gh_queries_dir() / "repo-Users.gql")
 
 repolist = load_repo_list(ghDataDir)
 
@@ -25,6 +26,7 @@ for userKey in dataCollectorExt.data["data"]:
 queryMan = make_query_manager()
 
 print("Gathering data across multiple paginated queries...")
+failed = 0
 for repo in repolist:
     print("\n'%s'" % (repo))
 
@@ -40,6 +42,7 @@ for repo in repolist:
     except Exception as error:
         print("Warning: Could not complete '%s'" % (repo))
         print(error)
+        failed += 1
         continue
 
     for user in outObj["data"]["repository"]["mentionableUsers"]["nodes"]:
@@ -74,6 +77,9 @@ for repo in repolist:
     print("'%s' Done!" % (repo))
 
 print("\nCollective data gathering complete!")
+
+if repolist and failed == len(repolist):
+    sys.exit("All queries failed; refusing to overwrite data")
 
 dataCollectorExt.fileSave(newline="\n")
 dataCollectorInt.fileSave(newline="\n")

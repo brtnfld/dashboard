@@ -1,14 +1,16 @@
-from gh_collector import gh_data_dir, load_data, load_repo_list, make_query_manager
+import sys
+from gh_collector import gh_data_dir, gh_queries_dir, load_data, load_repo_list, make_query_manager
 
 ghDataDir = gh_data_dir()
 datfilepath = ghDataDir / "intRepos_Languages.json"
-queryPath = "../queries/repo-Languages.gql"
+queryPath = str(gh_queries_dir() / "repo-Languages.gql")
 
 repolist = load_repo_list(ghDataDir)
 dataCollector = load_data(datfilepath)
 queryMan = make_query_manager()
 
 print("Gathering data across multiple paginated queries...")
+failed = 0
 for repo in repolist:
     print("\n'%s'" % (repo))
 
@@ -24,6 +26,7 @@ for repo in repolist:
     except Exception as error:
         print("Warning: Could not complete '%s'" % (repo))
         print(error)
+        failed += 1
         continue
 
     dataCollector.data["data"][repo] = outObj["data"]["repository"]
@@ -31,6 +34,9 @@ for repo in repolist:
     print("'%s' Done!" % (repo))
 
 print("\nCollective data gathering complete!")
+
+if repolist and failed == len(repolist):
+    sys.exit("All queries failed; refusing to overwrite data")
 
 dataCollector.fileSave(newline="\n")
 

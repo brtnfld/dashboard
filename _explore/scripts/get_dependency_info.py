@@ -1,9 +1,10 @@
+import sys
 from scraper.github import queryManager as qm
-from gh_collector import gh_data_dir, load_data, make_query_manager
+from gh_collector import gh_data_dir, gh_queries_dir, load_data, make_query_manager
 
 ghDataDir = gh_data_dir()
 datfilepath = ghDataDir / "dependencyInfo.json"
-queryPath = "../queries/dependency-Info.gql"
+queryPath = str(gh_queries_dir() / "dependency-Info.gql")
 
 # Build repo list from the dependency manifests data file
 inputLists = qm.DataManager(str(ghDataDir / "intRepos_Dependencies.json"), True)
@@ -24,6 +25,7 @@ dataCollector = load_data(datfilepath)
 queryMan = make_query_manager()
 
 print("Gathering data across multiple queries...")
+failed = 0
 for repo in repolist:
     print("\n'%s'" % (repo))
 
@@ -40,6 +42,7 @@ for repo in repolist:
     except Exception as error:
         print("Warning: Could not complete '%s'" % (repo))
         print(error)
+        failed += 1
         continue
 
     dataCollector.data["data"][repo] = outObj["data"]["repository"]
@@ -47,6 +50,9 @@ for repo in repolist:
     print("'%s' Done!" % (repo))
 
 print("\nCollective data gathering complete!")
+
+if repolist and failed == len(repolist):
+    sys.exit("All queries failed; refusing to overwrite data")
 
 dataCollector.fileSave(newline="\n")
 

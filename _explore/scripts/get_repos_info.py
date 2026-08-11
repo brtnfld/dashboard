@@ -1,15 +1,16 @@
-from scraper.github import queryManager as qm
-import os
-from os import environ as env
 import sys
+import os
+import requests
+from os import environ as env
 from urllib.parse import quote as urlquote
-from gh_collector import gh_data_dir, load_data, load_input_lists
+from scraper.github import queryManager as qm
+from gh_collector import gh_data_dir, gh_queries_dir, load_data, load_input_lists
 
 ghDataDir = gh_data_dir()
 datfilepath = ghDataDir / "intReposInfo.json"
 cdash_data_path = ghDataDir.parent / "cass_project_data"
-queryPath = "../queries/org-Repos-Info.gql"
-queryPathInd = "../queries/repo-Info.gql"
+queryPath = str(gh_queries_dir() / "org-Repos-Info.gql")
+queryPathInd = str(gh_queries_dir() / "repo-Info.gql")
 
 dataCollector = load_data(datfilepath)
 
@@ -28,12 +29,12 @@ for hostUrl, hostInfo in inputLists.data.items():
         continue
     if repoType == "gitlab":
         print("%s: Gathering GitLab repo info..." % hostUrl)
-        import requests
         apiToken = env.get(hostInfo.get("apiEnvKey", ""), "")
         headers = {}
         if apiToken:
             headers["PRIVATE-TOKEN"] = apiToken
         repolist = hostInfo.get("repos", []) + hostInfo.get("extraRepos", [])
+        failed = 0
         for repo in repolist:
             print("\n'%s'" % repo)
             try:
@@ -82,7 +83,12 @@ for hostUrl, hostInfo in inputLists.data.items():
             except Exception as error:
                 print("Warning: Could not complete '%s'" % repo)
                 print(error)
+                failed += 1
                 continue
+
+        if repolist and failed == len(repolist):
+            sys.exit("All queries failed for %s; refusing to overwrite data" % hostUrl)
+
         print("\n%s: GitLab data gathering complete!" % hostUrl)
         continue
     if repoType != "github":
@@ -101,6 +107,7 @@ for hostUrl, hostInfo in inputLists.data.items():
     queryMan = qm.GitHubQueryManager(apiToken=env.get(hostInfo["apiEnvKey"]))
 
     print("%s: Gathering data across multiple paginated queries..." % hostUrl)
+    failed_orgs = 0
     for org in orglist:
         print("\n'%s'" % (org))
 
@@ -115,6 +122,7 @@ for hostUrl, hostInfo in inputLists.data.items():
         except Exception as error:
             print("Warning: Could not complete '%s'" % (org))
             print(error)
+            failed_orgs += 1
             continue
 
         for repo in outObj["data"]["organization"]["repositories"]["nodes"]:
@@ -129,6 +137,7 @@ for hostUrl, hostInfo in inputLists.data.items():
 
     print("%s: Adding independent repos..." % (hostUrl))
     print("%s: Gathering data across multiple queries..." % (hostUrl))
+    failed_repos = 0
     for repo in repolist:
         print("\n'%s'" % (repo))
 
@@ -140,6 +149,7 @@ for hostUrl, hostInfo in inputLists.data.items():
         except Exception as error:
             print("Warning: Could not complete '%s'" % (repo))
             print(error)
+            failed_repos += 1
             continue
 
         repoKey = outObj["data"]["repository"]["nameWithOwner"]
@@ -150,6 +160,9 @@ for hostUrl, hostInfo in inputLists.data.items():
         print("'%s' Done!" % (repo))
 
     print("\n%s: Collective data gathering Part2of2 complete!" % (hostUrl))
+
+    if (orglist and failed_orgs == len(orglist)) and (repolist and failed_repos == len(repolist)):
+        sys.exit("All queries failed for %s; refusing to overwrite data" % hostUrl)
 
 dataCollector.fileSave(newline="\n")
 

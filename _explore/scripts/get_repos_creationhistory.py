@@ -1,3 +1,4 @@
+import sys
 from scraper.github import queryManager as qm
 from gh_collector import gh_data_dir, load_data, load_repo_list, make_query_manager
 import re
@@ -14,6 +15,8 @@ dataCollector = load_data(datfilepath)
 queryMan = make_query_manager()
 
 print("Gathering data across multiple paginated queries...")
+attempted = 0
+succeeded = 0
 for repo in repolist:
     print("\n'%s'" % (repo))
 
@@ -22,6 +25,7 @@ for repo in repolist:
             print("Already recorded data for '%s'" % (repo))
             continue
 
+    attempted += 1
     repoData = {}
     r = repo.split("/")
 
@@ -80,10 +84,14 @@ for repo in repolist:
     del repoData["commitTimestamps"]
 
     dataCollector.data["data"][repo] = repoData
+    succeeded += 1
 
     print("'%s' Done!" % (repo))
 
 print("\nCollective data gathering complete!")
+
+if attempted > 0 and succeeded == 0:
+    sys.exit("All queries failed; refusing to overwrite data")
 
 # Remove any data for repos no longer in the list
 print("Deleting unwanted data (from unlisted repos)...")

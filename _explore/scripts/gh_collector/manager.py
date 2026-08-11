@@ -7,7 +7,7 @@ def load_data(data_file: os.PathLike):
     collector = qm.DataManager(data_file, False)
     try:
         collector.fileLoad()
-    except Exception:
+    except FileNotFoundError:
         collector.data = {"data": {}}
     if not isinstance(collector.data, dict) or "data" not in collector.data:
         collector.data = {"data": {}}
@@ -37,8 +37,3 @@ def make_query_manager(api_token=None):
     if api_token is not None:
         return qm.GitHubQueryManager(apiToken=api_token)
     return qm.GitHubQueryManager()
-
-
-def manager(data_file: os.PathLike):
-    """Alias for load_data(); kept for backwards compatibility."""
-    return load_data(data_file)

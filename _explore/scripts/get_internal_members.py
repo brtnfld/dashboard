@@ -1,11 +1,11 @@
+import sys
 from scraper.github import queryManager as qm
 from os import environ as env
-import sys
-from gh_collector import gh_data_dir, load_data, load_input_lists
+from gh_collector import gh_data_dir, gh_queries_dir, load_data, load_input_lists
 
 ghDataDir = gh_data_dir()
 datfilepath = ghDataDir / "intUsers.json"
-queryPath = "../queries/org-Members.gql"
+queryPath = str(gh_queries_dir() / "org-Members.gql")
 
 dataCollector = load_data(datfilepath)
 
@@ -31,6 +31,7 @@ for hostUrl, hostInfo in inputLists.data.items():
     queryMan = qm.GitHubQueryManager(apiToken=env.get(hostInfo["apiEnvKey"]))
 
     print("%s: Gathering data across multiple paginated queries..." % (hostUrl))
+    failed = 0
     for org in orglist:
         print("\n'%s'" % (org))
 
@@ -45,6 +46,7 @@ for hostUrl, hostInfo in inputLists.data.items():
         except Exception as error:
             print("Warning: Could not complete '%s'" % (org))
             print(error)
+            failed += 1
             continue
 
         for user in outObj["data"]["organization"]["membersWithRole"]["nodes"]:
@@ -52,6 +54,9 @@ for hostUrl, hostInfo in inputLists.data.items():
             dataCollector.data["data"][userKey] = user
 
         print("'%s' Done!" % (org))
+
+    if orglist and failed == len(orglist):
+        sys.exit("All queries failed for %s; refusing to overwrite data" % hostUrl)
 
     print("\n%s: Collective data gathering complete!" % (hostUrl))
 
