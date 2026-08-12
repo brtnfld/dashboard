@@ -108,6 +108,7 @@ for hostUrl, hostInfo in inputLists.data.items():
 
     print("%s: Gathering data across multiple paginated queries..." % hostUrl)
     failed_orgs = 0
+    seen_repos = set()
     for org in orglist:
         print("\n'%s'" % (org))
 
@@ -128,6 +129,7 @@ for hostUrl, hostInfo in inputLists.data.items():
         for repo in outObj["data"]["organization"]["repositories"]["nodes"]:
             repoKey = repo["nameWithOwner"]
             dataCollector.data["data"][repoKey] = repo
+            seen_repos.add(repoKey)
             if repoKey in cdash_mapping:
                 dataCollector.data["data"][repoKey]["cdash"] = cdash_mapping[repoKey]
 
@@ -154,6 +156,7 @@ for hostUrl, hostInfo in inputLists.data.items():
 
         repoKey = outObj["data"]["repository"]["nameWithOwner"]
         dataCollector.data["data"][repoKey] = outObj["data"]["repository"]
+        seen_repos.add(repoKey)
         if repoKey in cdash_mapping:
             dataCollector.data["data"][repoKey]["cdash"] = cdash_mapping[repoKey]
 
@@ -163,6 +166,13 @@ for hostUrl, hostInfo in inputLists.data.items():
 
     if (orglist and failed_orgs == len(orglist)) and (repolist and failed_repos == len(repolist)):
         sys.exit("All queries failed for %s; refusing to overwrite data" % hostUrl)
+
+    if failed_orgs == 0 and failed_repos == 0:
+        print("Removing data for repos no longer in the list...")
+        for repo in list(dataCollector.data["data"].keys()):
+            if repo not in seen_repos:
+                dataCollector.data["data"].pop(repo)
+                print("Removed '%s'" % repo)
 
 dataCollector.fileSave(newline="\n")
 

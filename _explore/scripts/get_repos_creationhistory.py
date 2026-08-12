@@ -93,12 +93,12 @@ print("\nCollective data gathering complete!")
 if attempted > 0 and succeeded == 0:
     sys.exit("All queries failed; refusing to overwrite data")
 
-# Remove any data for repos no longer in the list
-print("Deleting unwanted data (from unlisted repos)...")
-for repo in list(dataCollector.data["data"].keys()):
-    if repo not in repolist:
-        dataCollector.data["data"].pop(repo, None)
-        print("Removed '%s'" % (repo))
+if attempted == 0 or succeeded == attempted:
+    print("Removing data for repos no longer in the list...")
+    for repo in list(dataCollector.data["data"].keys()):
+        if repo not in repolist:
+            dataCollector.data["data"].pop(repo, None)
+            print("Removed '%s'" % (repo))
 
 dataCollector.fileSave(newline="\n")
 

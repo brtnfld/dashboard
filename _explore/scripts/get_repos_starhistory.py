@@ -39,6 +39,13 @@ print("\nCollective data gathering complete!")
 if repolist and failed == len(repolist):
     sys.exit("All queries failed; refusing to overwrite data")
 
+if failed == 0:
+    print("Removing data for repos no longer in the list...")
+    for repo in list(dataCollector.data["data"].keys()):
+        if repo not in repolist:
+            dataCollector.data["data"].pop(repo)
+            print("Removed '%s'" % repo)
+
 
 def next_weekday(d, weekday):
     days_ahead = weekday - d.weekday()

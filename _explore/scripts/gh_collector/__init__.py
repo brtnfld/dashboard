@@ -22,4 +22,4 @@ def gh_data_dir():
 
 def gh_queries_dir():
     """Returns the path to the GQL queries directory."""
-    return pathlib.Path(__file__).parent.parent / "queries"
+    return pathlib.Path(__file__).parent.parent.parent / "queries"
