@@ -1,27 +1,16 @@
-from scraper.github import queryManager as qm
-from os import environ as env
+import sys
+from gh_collector import gh_data_dir, gh_queries_dir, load_data, load_repo_list, make_query_manager
 
-ghDataDir = env.get("GITHUB_DATA", "../github-data")
-datfilepath = "%s/intRepos_ReleaseHistory.json" % ghDataDir
-queryPath = "../queries/repo-Releases.gql"
+ghDataDir = gh_data_dir()
+datfilepath = ghDataDir / "intRepos_ReleaseHistory.json"
+queryPath = str(gh_queries_dir() / "repo-Releases.gql")
 
-# Read repo info data file (to use as repo list)
-inputLists = qm.DataManager("%s/intReposInfo.json" % ghDataDir, True)
-# Populate repo list
-repolist = []
-print("Getting internal repos ...")
-repolist = sorted(inputLists.data["data"].keys())
-print("Repo list complete. Found %d repos." % (len(repolist)))
+repolist = load_repo_list(ghDataDir)
+dataCollector = load_data(datfilepath)
+queryMan = make_query_manager()
 
-# Initialize query manager
-queryMan = qm.GitHubQueryManager()
-
-# Initialize data collector
-dataCollector = qm.DataManager(datfilepath, False)
-dataCollector.data = {"data": {}}
-
-# Iterate through internal repos
 print("Gathering data across multiple paginated queries...")
+failed = 0
 for repo in repolist:
     print("\n'%s'" % (repo))
 
@@ -37,16 +26,25 @@ for repo in repolist:
     except Exception as error:
         print("Warning: Could not complete '%s'" % (repo))
         print(error)
+        failed += 1
         continue
 
-    # Update collective data
     dataCollector.data["data"][repo] = outObj["data"]["repository"]
 
     print("'%s' Done!" % (repo))
 
 print("\nCollective data gathering complete!")
 
-# Write output files
+if repolist and failed == len(repolist):
+    sys.exit("All queries failed; refusing to overwrite data")
+
+if failed == 0:
+    print("Removing data for repos no longer in the list...")
+    for repo in list(dataCollector.data["data"].keys()):
+        if repo not in repolist:
+            dataCollector.data["data"].pop(repo)
+            print("Removed '%s'" % repo)
+
 dataCollector.fileSave(newline="\n")
 
 print("\nDone!\n")
