@@ -1,3 +1,4 @@
+import sys
 from gh_collector import gh_data_dir, load_data, load_repo_list, make_query_manager
 import re
 from datetime import datetime
@@ -11,6 +12,7 @@ dataCollector = load_data(datfilepath)
 queryMan = make_query_manager()
 
 print("Gathering data across multiple queries...")
+failed = 0
 for repo in repolist:
     print("\n'%s'" % (repo))
 
@@ -24,6 +26,7 @@ for repo in repolist:
     except Exception as error:
         print("Warning: Could not complete '%s'" % (repo))
         print(error)
+        failed += 1
         continue
 
     for item in outObj:
@@ -40,6 +43,16 @@ for repo in repolist:
     print("'%s' Done!" % (repo))
 
 print("\nCollective data gathering complete!")
+
+if repolist and failed == len(repolist):
+    sys.exit("All queries failed; refusing to overwrite data")
+
+if failed == 0:
+    print("Removing data for repos no longer in the list...")
+    for repo in list(dataCollector.data["data"].keys()):
+        if repo not in repolist:
+            dataCollector.data["data"].pop(repo)
+            print("Removed '%s'" % repo)
 
 dataCollector.fileSave(newline="\n")
 

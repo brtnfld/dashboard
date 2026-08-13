@@ -48,13 +48,6 @@ for repo in repolist:
     for user in outObj["data"]["repository"]["mentionableUsers"]["nodes"]:
         userKey = user["login"]
         if userKey in memberlist:
-            if (
-                "contributedLabRepositories"
-                not in dataCollectorInt.data["data"][userKey]
-            ):
-                dataCollectorInt.data["data"][userKey]["contributedLabRepositories"] = {
-                    "nodes": []
-                }
             dataCollectorInt.data["data"][userKey]["contributedLabRepositories"][
                 "nodes"
             ].append(repo)

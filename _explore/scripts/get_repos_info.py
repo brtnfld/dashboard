@@ -22,6 +22,8 @@ with open(os.path.join(str(cdash_data_path), "cass_member_cdashes.csv")) as f:
         cdash_mapping[repo] = cdash_url
 
 inputLists = load_input_lists()
+seen_repos = set()
+any_failures = False
 for hostUrl, hostInfo in inputLists.data.items():
     repoType = hostInfo["repoType"]
     if repoType == "bitbucket":
@@ -79,6 +81,7 @@ for hostUrl, hostInfo in inputLists.data.items():
 
                 repoKey = info["nameWithOwner"]
                 dataCollector.data["data"][repoKey] = info
+                seen_repos.add(repoKey)
                 print("'%s' Done!" % repo)
             except Exception as error:
                 print("Warning: Could not complete '%s'" % repo)
@@ -88,6 +91,8 @@ for hostUrl, hostInfo in inputLists.data.items():
 
         if repolist and failed == len(repolist):
             sys.exit("All queries failed for %s; refusing to overwrite data" % hostUrl)
+        if failed > 0:
+            any_failures = True
 
         print("\n%s: GitLab data gathering complete!" % hostUrl)
         continue
@@ -108,7 +113,6 @@ for hostUrl, hostInfo in inputLists.data.items():
 
     print("%s: Gathering data across multiple paginated queries..." % hostUrl)
     failed_orgs = 0
-    seen_repos = set()
     for org in orglist:
         print("\n'%s'" % (org))
 
@@ -164,15 +168,19 @@ for hostUrl, hostInfo in inputLists.data.items():
 
     print("\n%s: Collective data gathering Part2of2 complete!" % (hostUrl))
 
-    if (orglist and failed_orgs == len(orglist)) and (repolist and failed_repos == len(repolist)):
+    total_attempted = len(orglist) + len(repolist)
+    total_failed = failed_orgs + failed_repos
+    if total_attempted > 0 and total_failed == total_attempted:
         sys.exit("All queries failed for %s; refusing to overwrite data" % hostUrl)
+    if failed_orgs > 0 or failed_repos > 0:
+        any_failures = True
 
-    if failed_orgs == 0 and failed_repos == 0:
-        print("Removing data for repos no longer in the list...")
-        for repo in list(dataCollector.data["data"].keys()):
-            if repo not in seen_repos:
-                dataCollector.data["data"].pop(repo)
-                print("Removed '%s'" % repo)
+if not any_failures:
+    print("Removing data for repos no longer in the list...")
+    for repo in list(dataCollector.data["data"].keys()):
+        if repo not in seen_repos:
+            dataCollector.data["data"].pop(repo)
+            print("Removed '%s'" % repo)
 
 dataCollector.fileSave(newline="\n")
 

@@ -21,7 +21,7 @@ for repo in repolist:
     print("\n'%s'" % (repo))
 
     if repo in dataCollector.data["data"]:
-        if dataCollector.data["data"][repo]["firstCommitAt"]:
+        if dataCollector.data["data"][repo].get("firstCommitAt"):
             print("Already recorded data for '%s'" % (repo))
             continue
 

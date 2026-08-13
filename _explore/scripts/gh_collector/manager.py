@@ -4,7 +4,7 @@ import os
 
 def load_data(data_file: os.PathLike):
     """Load existing JSON data file, or initialize an empty {"data": {}} structure if missing."""
-    collector = qm.DataManager(data_file, False)
+    collector = qm.DataManager(str(data_file), False)
     try:
         collector.fileLoad()
     except FileNotFoundError:

@@ -59,8 +59,11 @@ def toDate(isoStr):
 
 
 for repo in dataCollector.data["data"]:
+    entry = dataCollector.data["data"][repo]
+    if not isinstance(entry, dict) or "stargazers" not in entry:
+        continue  # already transformed on a prior run; this repo failed this run
     dateRange = list(
-        map(toDate, dataCollector.data["data"][repo]["stargazers"]["edges"])
+        map(toDate, entry["stargazers"]["edges"])
     )
     dateList = []
     dateElement = {"date": None, "value": None}
