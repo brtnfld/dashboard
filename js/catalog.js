@@ -597,6 +597,7 @@ const SUBMETRIC_DESCRIPTIONS = {
   "Enhanced Document Detection": "Advanced file scanning for CODE_OF_CONDUCT.md, CONTRIBUTING.md, GOVERNANCE.md, and variant naming conventions using GitHub Contents API.",
   "Governance Keyword Analysis": "Natural language processing to detect governance-related keywords, decision-making processes, and community structure indicators.",
   "OpenSSF Badge Integration": "Automated assessment of OpenSSF Best Practices Badge completion status, particularly governance documentation requirements.",
+  "OpenSSF Scorecard": "Automated OpenSSF Scorecard assessment (0–10) covering branch protection, code review, dependency update automation, and vulnerability disclosure, with a per-check breakdown of the checks a project is failing.",
   "CHAOSS Governance Metrics": "Implementation of standardized CHAOSS governance health indicators, including decision-making transparency and community participation metrics.",
   "Governance Effectiveness Assessment": "Analysis of issue resolution patterns, decision implementation tracking, and community participation in governance processes.",
   // 4.2.2 Open-Source Licensing and FAIR Compliance
