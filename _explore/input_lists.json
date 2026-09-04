@@ -46,7 +46,6 @@
             "llnl/pylibrom",
             "llvm/llvm-project",
             "icl-utk-edu/magma",
-            "icl-utk-edu/magma",
             "mfem/mfem",
             "pmodels/mpich",
             "pnnl/neuromancer",
@@ -79,12 +78,9 @@
             "llnl/zfp",
             "hpctoolkit/hpctoolkit",
             "paraview/paraview",
-            "paraview/paraview",
             "petsc/petsc",
-            "anlsys/aml",
             "berkeleylab/gasnet",
             "berkeleylab/upcxx",
-            "deephyper/deephyper",
             "e4s-project/e4s",
             "ebugger/empirical-roofline-toolkit",
             "flang-compiler/flang",
@@ -98,7 +94,6 @@
         "repoType": "gitlab",
         "repos": [
             "hpctoolkit/hpctoolkit",
-            "paraview/paraview",
             "paraview/paraview",
             "petsc/petsc"
         ]
