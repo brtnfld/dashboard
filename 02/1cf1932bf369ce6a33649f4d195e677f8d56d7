@@ -1,0 +1,26 @@
+js/catalog.js
+  s_cfd15399e3a7c9::t_6074044837c7b4 301
+  s_cfd15399e3a7c9::t_ec28b99c1a2849 20,291,327,533,867-898,938-942,944-955,997-998,1076-1079
+_layouts/catalog.html
+  s_cfd15399e3a7c9::t_2e05d8faa9191b 40,64-66
+_sass/main.scss
+  s_cfd15399e3a7c9::t_597b0366641c0d 63-93
+catalog/README.md
+  s_cfd15399e3a7c9::t_3c6a571df7ca64 3,7,24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "021cf1932bf369ce6a33649f4d195e677f8d56d7",
+  "prompts": {},
+  "sessions": {
+    "s_cfd15399e3a7c9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "fd256eaa-4560-4c34-97ff-427d49eed9fa",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "M. Scot Breitenfeld <brtnfld@hdfgroup.org>"
+    }
+  }
+}
