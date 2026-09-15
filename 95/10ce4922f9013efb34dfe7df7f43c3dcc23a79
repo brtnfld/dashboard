@@ -1,0 +1,48 @@
+js/catalog.js
+  s_d747e0f85eade2::t_b623138c677698 302-303
+  s_d747e0f85eade2::t_e400221cc898ae 269,272,274,279,286
+  s_d747e0f85eade2::t_622b311d95fd2c 870-872
+  s_d747e0f85eade2::t_580a5c8488d495 242-243
+  s_d747e0f85eade2::t_ae45f4fd521fe2 251,256
+test-metrics-layout.html
+  s_d747e0f85eade2::t_9933ea67c8652a 155,159
+  s_d747e0f85eade2::t_5d196e77f2801a 343,345,347
+  s_d747e0f85eade2::t_7ca1ebcd8f8f9d 228-229,233
+explore/github-data/METRICS-README.md
+  s_d747e0f85eade2::t_1edc87841cde29 134
+  s_d747e0f85eade2::t_3ceb34dc08d822 52
+css/metrics.scss
+  s_d747e0f85eade2::t_f4d97d0ae526b1 247,251-252
+  s_d747e0f85eade2::t_6c86bacb1c27f2 331
+test-metrics-pinwheel.html
+  s_d747e0f85eade2::t_ff3fba301b81ec 225-226
+  s_d747e0f85eade2::t_34a8461bbf536a 61
+test-metrics-radial.html
+  s_d747e0f85eade2::t_a3b4e60366eb64 482
+  s_d747e0f85eade2::t_f0c051612ddf85 237
+test-metrics-badges.html
+  s_d747e0f85eade2::t_d920912030be20 483-485
+  s_d747e0f85eade2::t_331ff19a4d6f6c 298,300,302,305-308,310
+  s_d747e0f85eade2::t_be0ee457428796 336
+  s_d747e0f85eade2::t_46f53ae3ac76ce 78
+test-metrics-with-data.html
+  s_d747e0f85eade2::t_3b0c3457ed0986 146,150
+  s_d747e0f85eade2::t_0aa7c0f856f757 356,358,360
+  s_d747e0f85eade2::t_9fc0eb021a1e8a 237-238,242
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "9510ce4922f9013efb34dfe7df7f43c3dcc23a79",
+  "prompts": {},
+  "sessions": {
+    "s_d747e0f85eade2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "326452bd-3ca0-4d26-8db7-8c8abaa74dd1",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "M. Scot Breitenfeld <brtnfld@hdfgroup.org>"
+    }
+  }
+}
