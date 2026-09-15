@@ -1,0 +1,22 @@
+css/metrics.scss
+  s_0c9b4352b01b98::t_280a498bbf97a9 245
+  s_0c9b4352b01b98::t_7b2e6d56b768f1 333-334
+js/catalog.js
+  s_0c9b4352b01b98::t_400eeb5ff5ed29 289-290,292,296
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "3e898be658293e6419d54cf215a01a181a756c78",
+  "prompts": {},
+  "sessions": {
+    "s_0c9b4352b01b98": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5fbd3906-d16a-410d-8fbf-8646a76b60e9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "M. Scot Breitenfeld <brtnfld@hdfgroup.org>"
+    }
+  }
+}
