@@ -1,0 +1,71 @@
+name: Register a project
+description: Add your project to the CORSA Sustainability Dashboard
+title: "Register: "
+labels: ["registration"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing this, add a `.corsa/metrics.yaml` file to the root of
+        **your own repo** with a `repo:` field matching the repo you're
+        registering below -- this is how we verify you control it. See
+        [docs/PROJECT_CONFIG.md](https://github.com/corsa-center/metrics/blob/main/docs/PROJECT_CONFIG.md)
+        in the metrics repo for its format.
+
+        For this to merge automatically rather than waiting on a maintainer,
+        file this issue from a GitHub account that appears in the target
+        repo's own commit history.
+
+        If your project is already part of the
+        [CASS software catalog](https://github.com/cass-community/cass-community.github.io),
+        register there instead -- it flows into this dashboard automatically
+        and this form isn't needed.
+  - type: input
+    id: repo
+    attributes:
+      label: GitHub repository
+      description: "As owner/repo, e.g. HDFGroup/hdf5"
+      placeholder: owner/repo
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: Display name
+      placeholder: My Project
+    validations:
+      required: true
+  - type: dropdown
+    id: areas
+    attributes:
+      label: Category
+      description: Pick the one that best fits. See catalog/category_info.json for descriptions.
+      multiple: true
+      options:
+        - DATA AND VISUALIZATION
+        - DEVELOPMENT TOOLS
+        - MATHEMATICAL LIBRARIES
+        - PROGRAMMING MODELS AND RUNTIMES
+        - SOFTWARE ECOSYSTEM AND DELIVERY
+    validations:
+      required: true
+  - type: input
+    id: contact
+    attributes:
+      label: Contact (optional)
+      placeholder: you@example.org
+    validations:
+      required: false
+  - type: input
+    id: spack_name
+    attributes:
+      label: Spack package name (optional, if packaged)
+    validations:
+      required: false
+  - type: checkboxes
+    id: attestation
+    attributes:
+      label: Authorization
+      options:
+        - label: I have permission to register this project on its behalf (e.g. I'm a maintainer or was asked to do this by one).
+          required: true

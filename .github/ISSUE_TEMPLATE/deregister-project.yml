@@ -1,0 +1,23 @@
+name: Deregister a project
+description: Remove a self-registered project from the CORSA Sustainability Dashboard
+title: "Deregister: "
+labels: ["deregistration"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This only removes an entry that came in through the self-registration
+        `registry/` mechanism. If your project is tracked via the CASS
+        software catalog instead, see that catalog's own removal process.
+
+        This merges automatically if you (the GitHub account filing this)
+        appear in the target repo's own commit history, or are a recognized
+        submitter. Otherwise a maintainer will handle it.
+  - type: input
+    id: repo
+    attributes:
+      label: GitHub repository
+      description: "As owner/repo, exactly as it was registered, e.g. HDFGroup/hdf5"
+      placeholder: owner/repo
+    validations:
+      required: true

@@ -1,0 +1,17 @@
+# Soft gates for automated project registration (.github/workflows/register-project.yml).
+#
+# These decide auto-merge eligibility only -- they never reject a
+# registration outright. A submission failing one of these still gets a PR
+# opened; it just waits for a maintainer to merge instead of auto-merging.
+# The ownership check (.corsa/metrics.yaml in the target repo, matching
+# repo:) always runs regardless of these and is not configured here.
+
+# Repo must be at least this old to qualify for auto-merge.
+min_repo_age_days: 30
+
+# Repo must have at least this many stars to qualify for auto-merge.
+min_stars: 0
+
+# Auto-merges per submitter (issue author) in a rolling 24h window, counted
+# from `submitted_by` + `registered_at` already present in registry/*.yaml.
+max_auto_merges_per_submitter_per_day: 3

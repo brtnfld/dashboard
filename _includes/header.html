@@ -32,6 +32,7 @@
       <div class="site-dropdown" aria-label="About menu">
         <a {% if page.url contains "/about/faq/" %}class="active"{% endif %} href="{{ 'about/faq' | relative_url }}">FAQ</a>
         <a {% if page.url contains "/about/licenses/" %}class="active"{% endif %} href="{{ 'about/licenses' | relative_url }}">Licenses Guide</a>
+        <a href="{{ site.repo_url }}/issues/new?template=register-project.yml">Register a Project</a>
       </div>
     </div>
 

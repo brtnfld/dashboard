@@ -142,11 +142,21 @@ if response.status_code == 200:
     key_path = ['https://github.com', 'extraRepos']
     extraRepo_list = read_nested_list_in_json(file_to_update, key_path)
 
+    # Self-registered projects (registry/*.yaml, folded in by load_registry.py
+    # -- see .github/workflows/get_cass_projects.yml, which runs it first).
+    # Read fresh rather than trusted from a variable, since load_registry.py
+    # owns this key exclusively and rewrites it wholesale every run: deleting
+    # a registry/*.yaml file drops its repo here with no extra removal step.
+    key_path = ['https://github.com', 'registryRepos']
+    registry_list = read_nested_list_in_json(file_to_update, key_path) or []
+
     # TODO REMOVE github_list.append when gitlab scraper is ready
     # see get_repos_info.py
     for item in gitlab_list:
         github_list.append(item)
     for item in extraRepo_list:
+        github_list.append(item)
+    for item in registry_list:
         github_list.append(item)
 
     # Apply known corrections for upstream .md files with stale/wrong URLs.

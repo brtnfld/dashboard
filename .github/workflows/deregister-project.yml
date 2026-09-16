@@ -1,0 +1,54 @@
+name: Deregister project
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo:
+        description: 'Repository to remove, as owner/repo (must match an existing registry/<owner>_<repo>.yaml)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  deregister:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      # workflow_dispatch already requires write access to trigger, so no
+      # separate trust check is needed here -- unlike registration, removal
+      # has no self-service path.
+      - name: Remove registry entry and open a revert PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ inputs.repo }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          FILE="registry/$(echo "$REPO" | tr '/' '_').yaml"
+          if [ ! -f "$FILE" ]; then
+            echo "::error::$FILE does not exist -- nothing to deregister for $REPO"
+            exit 1
+          fi
+
+          BRANCH="deregister/$(echo "$REPO" | tr '/' '-' | tr '[:upper:]' '[:lower:]')"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          # -B + --force-with-lease so a stale branch from an abandoned prior
+          # attempt at the same repo doesn't hard-fail this run.
+          git checkout -B "$BRANCH"
+          git rm "$FILE"
+          git commit -m "Deregister $REPO"
+          git push --force-with-lease origin "$BRANCH"
+
+          EXISTING_PR=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')
+          if [ -n "$EXISTING_PR" ]; then
+            PR_NUMBER="$EXISTING_PR"
+          else
+            PR_URL=$(gh pr create --title "Deregister $REPO" --base main \
+              --head "$BRANCH" --body "Requested via workflow_dispatch by @$ACTOR.")
+            PR_NUMBER=$(basename "$PR_URL")
+          fi
+          gh pr merge "$PR_NUMBER" --squash --delete-branch

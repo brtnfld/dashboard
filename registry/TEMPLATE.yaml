@@ -1,0 +1,41 @@
+# This is a REFERENCE for the registry/*.yaml schema -- not something to
+# copy and PR by hand. Self-registering a project always goes through the
+# "Register a project" issue form (see README.md); a hand-authored PR adding
+# a file here directly skips every automated check and won't be accepted.
+#
+# Before filing that form, your repo must already contain a
+# .corsa/metrics.yaml file whose `repo:` field matches the one below -- this
+# is how a registration proves the submitter actually controls the repo
+# being registered. See the metrics repo's docs/PROJECT_CONFIG.md.
+#
+# One file per project, named registry/<owner>_<repo>.yaml (the GitHub owner
+# and repo name, joined with an underscore -- e.g. registry/HDFGroup_hdf5.yaml).
+# The registration workflow generates this from the issue form; the fields
+# below exist so you know what you're being asked for.
+
+# REQUIRED. GitHub "owner/repo", exactly as it appears in the repo's URL.
+repo: SomeOrg/some-project
+
+# REQUIRED. Display name shown on the dashboard.
+name: Some Project
+
+# REQUIRED. One or more categories, from this exact controlled vocabulary
+# (see catalog/category_info.json -- these are the dashboard's own catalog
+# categories, not the CASS software-catalog areas):
+#   DATA AND VISUALIZATION
+#   DEVELOPMENT TOOLS
+#   MATHEMATICAL LIBRARIES
+#   PROGRAMMING MODELS AND RUNTIMES
+#   SOFTWARE ECOSYSTEM AND DELIVERY
+areas:
+  - MATHEMATICAL LIBRARIES
+
+# OPTIONAL. Contact for questions about this registration.
+contact: someone@example.org
+
+# OPTIONAL. Spack package name, if packaged.
+# spack_name: some-project
+
+# --- Filled in automatically by the registration workflow; leave blank ---
+# submitted_by:
+# registered_at:

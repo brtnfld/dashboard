@@ -1,0 +1,10 @@
+# Review assignment, and doubles as the trust list the "Register a project"
+# workflow (.github/workflows/register-project.yml) checks before it will
+# auto-merge a self-registration: an issue author matching an owner or team
+# listed for registry/** gets auto-merge once every automated check passes;
+# anyone else's registration PR still opens, just waits for one of these
+# owners to merge it by hand. Accepts individual @users and @org/team slugs.
+#
+# Add yourself here once you've handled a few registrations by hand and want
+# to be trusted for auto-merge -- ask an existing owner to add you.
+registry/** @brtnfld

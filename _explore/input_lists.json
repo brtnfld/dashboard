@@ -83,7 +83,8 @@
             "ebugger/empirical-roofline-toolkit",
             "flang-compiler/flang",
             "sandialabs/albany"
-        ]
+        ],
+        "registryRepos": []
     },
     "https://gitlab.com": {
         "apiEnvKey": "GITLAB_API_TOKEN",

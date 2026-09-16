@@ -1108,17 +1108,31 @@ function setVisibleRepo(newValue, shouldPushState) {
           selectedCategoryIndex = 0;
           renderRepoListHeaderHtml();
 
-          // map topics to categories - first try CASS explicit mapping, then fall back to topics
-          fetch(`${window.config.baseUrl}/catalog/cass_category_mapping.json`)
-            .then((res) => res.json())
-            .then((cassMapping) => {
-              // Initialize category arrays with CASS mapping
+          // map topics to categories - first try CASS explicit mapping and
+          // self-registered projects (registry/*.yaml), then fall back to topics
+          Promise.all([
+            fetch(`${window.config.baseUrl}/catalog/cass_category_mapping.json`).then((res) => res.json()),
+            // Newer file; a stale cached deploy without it shouldn't break the catalog.
+            fetch(`${window.config.baseUrl}/explore/github-data/registryCategories.json`)
+              .then((res) => res.json())
+              .catch(() => ({ data: {} })),
+          ])
+            .then(([cassMapping, registryMapping]) => {
+              // Initialize category arrays with CASS mapping plus self-registered projects
               catData.forEach((category) => {
                 const catRepos = [];
+                const seen = new Set();
                 const cassRepos = cassMapping.data[category.title] || [];
-                // Add repos from CASS explicit mapping
                 cassRepos.forEach((repoName) => {
                   catRepos.push({ nameWithOwner: repoName });
+                  seen.add(repoName);
+                });
+                const registryRepos = registryMapping.data[category.title] || [];
+                registryRepos.forEach((repoName) => {
+                  if (!seen.has(repoName)) {
+                    catRepos.push({ nameWithOwner: repoName });
+                    seen.add(repoName);
+                  }
                 });
                 topicRepos.push(catRepos);
               });
