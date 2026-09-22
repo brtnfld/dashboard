@@ -1,0 +1,20 @@
+.github/workflows/update.yml
+  s_463efa05ebb989::t_51f52c60de493b 10
+  s_463efa05ebb989::t_c1e7d4324864b6 136-146
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "5fd3aac9427c07fea75180da7a181e3201b55ed3",
+  "prompts": {},
+  "sessions": {
+    "s_463efa05ebb989": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "22daf02f-1e67-403a-a1d0-c0a26ee53a28",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "M. Scot Breitenfeld <brtnfld@hdfgroup.org>"
+    }
+  }
+}
