@@ -1,0 +1,21 @@
+explore/github-data/METRICS-README.md
+  s_22ad13b7c382d3::t_c72f7fa73e5188 140-143
+js/catalog.js
+  s_22ad13b7c382d3::t_ed17d8427838d3 299-301,516,581
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "527facaff238dc932416c0f440947dcdfa941683",
+  "prompts": {},
+  "sessions": {
+    "s_22ad13b7c382d3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c3b5e661-b0ed-4739-8119-a604dab6973b",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "M. Scot Breitenfeld <brtnfld@hdfgroup.org>"
+    }
+  }
+}
